@@ -90,10 +90,10 @@ export default function ProjectFeature({
         <h2
           className="
             font-comic-serif
-            text-xl
+            text-[26px]
             leading-tight
             text-white
-            md:text-2xl
+            md:text-[30px]
           "
         >
           {title}
@@ -101,12 +101,12 @@ export default function ProjectFeature({
 
         <div
           className="
-            mt-2
+            mt-3
             max-w-3xl
             font-comic
-            text-sm
-            leading-6
-            text-white/55
+            text-lg
+            leading-8
+            text-white/80
           "
         >
           {children}
@@ -119,15 +119,15 @@ export default function ProjectFeature({
   return (
     <section
       className={`
-        my-4
+        my-7
         grid
-        gap-5
+        gap-6
 
         ${
           mediaBlock
             ? `
               md:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]
-              md:gap-7
+              md:gap-8
             `
             : "grid-cols-1"
         }

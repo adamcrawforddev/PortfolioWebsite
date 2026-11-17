@@ -18,11 +18,11 @@ export default function ProjectHeader({
   links = [],
 }: ProjectHeaderProps) {
   return (
-    <header className="pb-3">
+    <header className="pb-5">
       <div
         className="
           flex
-          items-center
+          items-start
           justify-between
           gap-5
         "
@@ -77,9 +77,9 @@ export default function ProjectHeader({
                           px-4
                           py-2
                           font-comic
-                          text-sm
-                          leading-none
-                          text-white/40
+                          text-base
+                          leading-6
+                          text-white/65
                           transition-[border-color,color,background-color]
                           duration-200
                           md:text-base
@@ -119,9 +119,9 @@ export default function ProjectHeader({
                           py-2
 
                           font-comic
-                          text-[11px]
-                          leading-5
-                          text-white/60
+                          text-sm
+                          leading-6
+                          text-white/80
 
                           opacity-0
                           shadow-[0_8px_24px_rgba(0,0,0,0.35)]
@@ -152,6 +152,11 @@ export default function ProjectHeader({
                     target="_blank"
                     rel="noreferrer"
                     className="
+                      inline-flex
+                      min-h-11
+                      items-center
+                      justify-center
+                      gap-2
                       rounded-[6px_12px_7px_14px]
                       border
                       border-white/22
@@ -159,24 +164,26 @@ export default function ProjectHeader({
                       px-4
                       py-2
                       font-comic
-                      text-sm
+                      text-base
                       leading-none
-                      text-white/70
+                      text-white/80
                       transition-[border-color,color,background-color]
                       duration-200
-                      md:text-base
-
                       hover:border-white/40
                       hover:bg-white/[0.05]
                       hover:text-white
-
-                      focus-visible:outline
-                      focus-visible:outline-1
+                      focus-visible:outline-2
                       focus-visible:outline-offset-2
-                      focus-visible:outline-white/50
+                      focus-visible:outline-white/80
                     "
                   >
-                    {link.label} ↗
+                    <span className="relative top-[2px]">
+  {link.label}
+</span>
+
+<span aria-hidden="true" className="text-lg leading-none relative top-[2px]">
+  🔗
+</span>
                   </a>
                 )
               }
@@ -210,7 +217,7 @@ export default function ProjectHeader({
                   font-comic
                   text-lg
                   leading-6
-                  text-white/70
+                  text-white/85
                   lg:text-2xl
                 "
               >
@@ -239,12 +246,12 @@ export default function ProjectHeader({
 
       <p
         className="
-          mt-1.5
+          mt-3
           max-w-2xl
           font-comic
-          text-sm
-          leading-6
-          text-white/50
+          text-lg
+          leading-8
+          text-white/75
         "
       >
         {subtitle}

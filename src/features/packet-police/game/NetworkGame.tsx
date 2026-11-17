@@ -4669,7 +4669,7 @@ function NetworkGame() {
           GAME
       ======================================== */}
 
-      <div className="relative overflow-hidden border border-white/5 bg-[#000112]">
+      <div className="relative mx-auto overflow-hidden border border-white/5 bg-[#000112]" style={{ width: `min(100%, calc(var(--game-board-max-height, 600px) * ${GAME_WIDTH} / ${GAME_HEIGHT}))` }}>
         <canvas
           ref={canvasRef}
           width={
@@ -4678,7 +4678,8 @@ function NetworkGame() {
           height={
             GAME_HEIGHT
           }
-          className="block h-auto max-h-[62vh] w-full object-contain"
+          className="mx-auto block h-auto w-full object-contain"
+          style={{ maxHeight: "var(--game-board-max-height, 600px)" }}
           aria-label="Packet Police arcade chase game"
         />
 

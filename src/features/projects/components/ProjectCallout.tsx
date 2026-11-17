@@ -17,15 +17,15 @@ export default function ProjectCallout({
         border-white/12
         bg-white/[0.018]
         px-4
-        py-3
+        py-4
         md:px-5
       "
     >
-      <div className="font-comic-serif text-2xl leading-none text-white">
+      <div className="font-comic-serif text-3xl leading-tight text-white">
         {value}
       </div>
 
-      <div className="mt-1.5 max-w-2xl font-comic text-[11px] leading-5 text-white/40">
+      <div className="mt-1.5 max-w-2xl font-comic text-base leading-7 text-white/75">
         {label}
       </div>
     </aside>

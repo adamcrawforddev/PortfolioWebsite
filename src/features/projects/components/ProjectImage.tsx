@@ -13,7 +13,7 @@ export default function ProjectImage({
   contain = false,
 }: ProjectImageProps) {
   return (
-    <figure className="my-3.5">
+    <figure className="my-5">
       <div
         className="
           overflow-hidden
@@ -43,7 +43,7 @@ export default function ProjectImage({
       </div>
 
       {caption && (
-        <figcaption className="mt-1.5 px-2 font-comic text-[10px] leading-4 text-white/30">
+        <figcaption className="mt-2 px-2 font-comic text-sm leading-6 text-white/65">
           {caption}
         </figcaption>
       )}

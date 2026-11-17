@@ -14,7 +14,7 @@ export default function ProjectImageGrid({
   return (
     <div
       className={`
-        my-3.5
+        my-5
         grid
         gap-3
         ${
@@ -61,7 +61,7 @@ export default function ProjectImageGrid({
             </div>
 
             {image.caption && (
-              <figcaption className="mt-1.5 px-2 font-comic text-[10px] leading-4 text-white/30">
+              <figcaption className="mt-2 px-2 font-comic text-sm leading-6 text-white/65">
                 {image.caption}
               </figcaption>
             )}

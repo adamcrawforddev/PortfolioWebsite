@@ -28,7 +28,7 @@ export default function PlanItProject({
         links={[
           {
             label: "GitHub",
-            href: "https://github.com/AdamCrawfordDev/festivalapp",
+            href: "https://github.com/adamcrawforddev/festivalapp",
           },
         ]}
       />

@@ -42,42 +42,42 @@ function SectionPanel({
           item.path
         }
       >
-        <h2 className="font-comic-serif text-3xl text-white">
+        <h2 className="font-comic-serif text-4xl text-white">
           Hi, I'm Adam.
         </h2>
 
-        <p className="mt-4 max-w-2xl text-sm leading-7 text-white/55">
+        <p className="mt-4 max-w-2xl text-lg leading-8 text-white/80">
           I'm a Computer Science graduate interested in building reliable,
           useful software across backend systems, machine learning and modern
           web applications.
         </p>
 
-        <p className="mt-3 max-w-2xl text-sm leading-7 text-white/55">
+        <p className="mt-3 max-w-2xl text-lg leading-8 text-white/80">
           I enjoy working on projects where there is something interesting
           happening underneath the interface, whether that is reinforcement
           learning, offline-first applications or data-driven systems.
         </p>
 
         <div className="mt-6 border-t border-dashed border-white/10 pt-4">
-          <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-white/30">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/65">
 
             <span>
               status:{" "}
-              <span className="text-white/55">
+              <span className="text-white/80">
                 available
               </span>
             </span>
 
             <span>
               focus:{" "}
-              <span className="text-white/55">
+              <span className="text-white/80">
                 software + ML
               </span>
             </span>
 
             <span>
               location:{" "}
-              <span className="text-white/55">
+              <span className="text-white/80">
                 London, UK
               </span>
             </span>
@@ -103,11 +103,11 @@ function SectionPanel({
           item.path
         }
       >
-        <h2 className="font-comic-serif text-3xl text-white">
+        <h2 className="font-comic-serif text-4xl text-white">
           Say hello.
         </h2>
 
-        <p className="mt-4 max-w-xl text-sm leading-7 text-white/55">
+        <p className="mt-4 max-w-2xl text-lg leading-8 text-white/80">
           Want to talk about a project, an opportunity, or something
           interesting? You can find me here.
         </p>
@@ -128,17 +128,17 @@ function SectionPanel({
 
           <ContactLink
             label="github"
-            value="AdamCrawfordDev"
-            href="https://github.com/AdamCrawfordDev"
+            value="adamcrawforddev"
+            href="https://github.com/adamcrawforddev"
           />
 
         </div>
 
         <div className="mt-6 border-t border-dashed border-white/10 pt-4">
-          <span className="font-comic text-xs text-white/25">
+          <span className="font-comic text-sm text-white/65">
             status:{" "}
 
-            <span className="text-white/50">
+            <span className="text-white/75">
               open to opportunities
             </span>
           </span>
@@ -162,17 +162,17 @@ function SectionPanel({
           item.path
         }
       >
-        <h2 className="font-comic-serif text-3xl text-white">
+        <h2 className="font-comic-serif text-4xl text-white">
           {item.name}
         </h2>
 
         {item.description && (
-          <p className="mt-4 max-w-md text-sm leading-7 text-white/55">
+          <p className="mt-4 max-w-2xl text-lg leading-8 text-white/80">
             {item.description}
           </p>
         )}
 
-        <div className="mt-5 font-comic text-xs text-white/30">
+        <div className="mt-5 font-comic text-sm text-white/65">
           {item.children.length}{" "}
 
           {item.children.length ===
@@ -182,13 +182,13 @@ function SectionPanel({
         </div>
 
         <div className="mt-6 border-t border-dashed border-white/10 pt-4">
-          <div className="flex items-center gap-2 font-comic text-xs">
+          <div className="flex items-center gap-2 font-comic text-sm">
 
-            <span className="text-white/25">
+            <span className="text-white/70">
               ENTER
             </span>
 
-            <span className="text-white/50">
+            <span className="text-white/75">
               &gt; open directory
             </span>
 
@@ -251,7 +251,7 @@ function SectionPanel({
           item.path
         }
       >
-        <h2 className="font-comic-serif text-3xl text-white">
+        <h2 className="font-comic-serif text-4xl text-white">
           {item.name ===
           "Freelance IT"
             ? "Freelance IT Consultant"
@@ -260,7 +260,7 @@ function SectionPanel({
 
 
         {item.subtitle && (
-          <p className="mt-1 text-sm text-white/45">
+          <p className="mt-1 text-base text-white/70">
             {item.subtitle}
           </p>
         )}
@@ -268,7 +268,7 @@ function SectionPanel({
 
         {(item.date ||
           item.location) && (
-          <div className="mt-2 flex flex-wrap gap-x-3 text-xs text-white/30">
+          <div className="mt-2 flex flex-wrap gap-x-3 text-sm text-white/65">
 
             {item.date && (
               <span>
@@ -294,7 +294,7 @@ function SectionPanel({
 
 
         {item.description && (
-          <p className="mt-4 max-w-xl text-sm leading-7 text-white/55">
+          <p className="mt-4 max-w-2xl text-lg leading-8 text-white/80">
             {item.description}
           </p>
         )}
@@ -316,10 +316,10 @@ function SectionPanel({
                     gap-3
                     text-sm
                     leading-6
-                    text-white/45
+                    text-white/70
                   "
                 >
-                  <span className="shrink-0 text-white/25">
+                  <span className="shrink-0 text-white/70">
                     &gt;
                   </span>
 
@@ -338,15 +338,15 @@ function SectionPanel({
           item.languages) && (
           <div className="mt-6 border-t border-dashed border-white/10 pt-4">
 
-            <div className="space-y-2 text-xs">
+            <div className="space-y-2 text-sm">
 
               {item.stack && (
                 <div>
-                  <span className="text-white/25">
+                  <span className="text-white/70">
                     stack:{" "}
                   </span>
 
-                  <span className="text-white/55">
+                  <span className="text-white/80">
                     {item.stack.join(
                       " · "
                     )}
@@ -357,11 +357,11 @@ function SectionPanel({
 
               {item.languages && (
                 <div>
-                  <span className="text-white/25">
+                  <span className="text-white/70">
                     languages:{" "}
                   </span>
 
-                  <span className="text-white/55">
+                  <span className="text-white/80">
                     {item.languages.join(
                       " · "
                     )}
@@ -388,11 +388,11 @@ function SectionPanel({
         item.path
       }
     >
-      <h2 className="font-comic-serif text-3xl text-white">
+      <h2 className="font-comic-serif text-4xl text-white">
         {item.name}
       </h2>
 
-      <p className="mt-4 text-sm text-white/45">
+      <p className="mt-4 text-base text-white/70">
         Content coming soon...
       </p>
     </PanelShell>
@@ -428,7 +428,7 @@ function MiniGamePanel({
       <div
         className="
           font-comic
-          text-[10px]
+          text-xs
           tracking-[0.18em]
           text-emerald-200/45
         "
@@ -440,7 +440,7 @@ function MiniGamePanel({
         className="
           mt-1
           font-comic-serif
-          text-3xl
+          text-4xl
           leading-none
           text-white
         "
@@ -454,7 +454,7 @@ function MiniGamePanel({
       {/* ======================================== */}
 
       {item.description && (
-        <p className="mt-4 max-w-xl text-sm leading-7 text-white/55">
+        <p className="mt-4 max-w-2xl text-lg leading-8 text-white/80">
           {item.description}
         </p>
       )}
@@ -475,31 +475,57 @@ type PanelShellProps = {
 }
 
 
+
+function getTerminalCommand(path: string): string {
+  const parts = path.split("/").filter(Boolean)
+  const name = parts[parts.length - 1] ?? ""
+
+  // Files in the root directory
+  if (name === "about") return "cat about.txt"
+  if (name === "contact") return "cat contact.txt"
+
+  // Directories selected from the root
+  if (parts.length === 1) {
+    return `cd ${name}/`
+  }
+
+  // Entries inside Experience
+  if (parts[0] === "experience") {
+    return `cat ${name}.txt`
+  }
+
+  // Entries inside Projects
+  if (parts[0] === "projects") {
+    return `code ${name}/README.md`
+  }
+
+  // Executable minigames
+  if (parts[0] === "minigames") {
+    return `./${name}.sh`
+  }
+
+  return `cd ${name}/`
+}
+
+
+
 function PanelShell({
   path,
   children,
 }: PanelShellProps) {
+  const command =
+    path === "/about"
+      ? "cat about.txt"
+      : path === "/contact"
+        ? "cat contact.txt"
+        : `cd ${path.replace(/^\//, "").replace(/\/$/, "")}/`
 
   return (
-    <div className="relative pl-6 font-comic">
-
-      <div
-        className="
-          absolute
-          left-0
-          top-1
-          h-[calc(100%-8px)]
-          w-px
-          bg-white/15
-        "
-      />
-
-      <div className="mb-4 text-xs tracking-wide text-white/30">
-        {path}
-      </div>
-
+    <div className="relative font-comic">
+      <div className="mb-4 text-sm tracking-wide text-white/65">
+  {getTerminalCommand(path)}
+</div>
       {children}
-
     </div>
   )
 }
@@ -548,32 +574,32 @@ function ContactLink({
       className="
         group
         flex
-        max-w-md
+        max-w-2xl
         items-center
         gap-3
         font-comic
-        text-sm
+        text-base
       "
     >
       <span
         className="
-          text-white/25
+          text-white/70
           transition-all
           duration-150
           group-hover:translate-x-1
-          group-hover:text-white/60
+          group-hover:text-white/70
         "
       >
         &gt;
       </span>
 
-      <span className="w-16 shrink-0 text-white/30">
+      <span className="w-16 shrink-0 text-white/70">
         {label}
       </span>
 
       <span
         className="
-          text-white/60
+          text-white/70
           underline
           decoration-white/15
           underline-offset-4

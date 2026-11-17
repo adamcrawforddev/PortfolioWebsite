@@ -34,7 +34,7 @@ export default function SelfDrivingCarProject({
         links={[
           {
             label: "GitHub",
-            href: "https://github.com/AdamCrawfordDev/CarGame",
+            href: "https://github.com/adamcrawforddev/CarGame",
           },
         ]}
       />

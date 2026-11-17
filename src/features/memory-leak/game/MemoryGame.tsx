@@ -3349,7 +3349,7 @@ export default function MemoryGame() {
       <div
         className="relative mx-auto overflow-hidden"
         style={{
-          width: `min(100%, calc((100dvh - 220px) * ${GAME_WIDTH / GAME_HEIGHT}))`,
+          width: `min(100%, calc(var(--game-board-max-height, 600px) * ${GAME_WIDTH} / ${GAME_HEIGHT}))`,
           aspectRatio: `${GAME_WIDTH} / ${GAME_HEIGHT}`,
         }}
       >

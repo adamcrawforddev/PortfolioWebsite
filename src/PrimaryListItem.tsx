@@ -17,64 +17,36 @@ function PrimaryListItem({
     <button
       type="button"
       onClick={onClick}
+      aria-current={selected ? "true" : undefined}
       className={`
-        group
-        flex
-        w-full
-        items-center
-        gap-3
-        py-1
-        text-left
-        font-comic
-        text-2xl
-        transition-all
-        duration-150
-        ${
-          selected
-            ? "translate-x-2 text-white"
-            : "text-slate-500 hover:text-slate-300"
-        }
+        group flex w-max items-center gap-3 whitespace-nowrap rounded-sm
+        py-2 text-left font-comic text-[30px] md:text-[32px] font-medium leading-snug
+        transition-[color,transform] duration-150
+        focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/80
+        ${selected
+          ? "translate-x-2 text-white"
+          : "text-[#B4C0D4] hover:translate-x-1 hover:text-white"}
       `}
     >
       <span
-        className={`
-          w-4
-          shrink-0
-          text-center
-          transition-all
-          duration-150
-          ${
-            selected
-              ? "opacity-100"
-              : "opacity-0"
-          }
-        `}
+        aria-hidden="true"
+        className={`w-4 shrink-0 text-center font-bold transition-opacity duration-150 ${selected ? "opacity-100" : "opacity-0"}`}
       >
         &gt;
       </span>
-
-      <span className="relative">
+      <span className="relative inline-block whitespace-nowrap">
         {name}
-
         {directory && (
-          <span className="ml-1 text-white/25">
+          <span aria-hidden="true" className={selected ? "ml-1 text-white/75" : "ml-1 text-[#9AAAC4]"}>
             /
           </span>
         )}
-
         {selected && (
           <img
             src={underline}
             alt=""
             aria-hidden="true"
-            className="
-              pointer-events-none
-              absolute
-              -bottom-2
-              left-0
-              h-[14px]
-              w-[110%]
-            "
+            className="pointer-events-none absolute -bottom-2 left-0 h-[14px] w-full max-w-none"
           />
         )}
       </span>

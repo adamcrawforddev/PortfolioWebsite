@@ -19,7 +19,7 @@ export default function ProjectReadme({
     <div className="flex h-full min-h-0 flex-col">
       <div
         className="
-          mb-3.5
+          mb-5
           flex
           shrink-0
           items-center
@@ -27,7 +27,7 @@ export default function ProjectReadme({
           gap-4
           border-b
           border-white/10
-          pb-2
+          pb-3
         "
       >
         <div
@@ -35,16 +35,16 @@ export default function ProjectReadme({
             min-w-0
             truncate
             font-comic
-            text-[10px]
+            text-sm
             tracking-[0.06em]
-            text-white/30
+            text-white/65
           "
         >
-          <span className="text-white/18">
+          <span className="text-white/50">
             ~/portfolio/projects/
           </span>
 
-          <span className="text-white/45">
+          <span className="text-white/85">
             {projectId}/README.md
           </span>
         </div>
@@ -56,9 +56,9 @@ export default function ProjectReadme({
             className="
               shrink-0
               font-comic
-              text-[10px]
+              text-sm
               tracking-[0.06em]
-              text-white/40
+              text-white/75
               transition-[transform,color]
               duration-200
               hover:-translate-x-1
@@ -87,7 +87,7 @@ export default function ProjectReadme({
           [&::-webkit-scrollbar-track]:bg-transparent
         "
       >
-        <div className="mx-auto w-full max-w-4xl pb-6">
+        <div className="mx-auto w-full max-w-4xl pb-10">
           {children}
         </div>
       </div>

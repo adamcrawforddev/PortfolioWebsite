@@ -1,6 +1,9 @@
+import type { CSSProperties } from "react"
+import KeyboardFooter from "./KeyboardFooter"
 import {
 
   useEffect,
+  useLayoutEffect,
 
   useRef,
 
@@ -53,6 +56,8 @@ import type {
 // ========================================
 
 const PANEL_OUT_DURATION = 220
+
+const SEPARATOR_PADDING = 12
 
 const DIRECTORY_OUT_DURATION = 180
 
@@ -111,6 +116,10 @@ type ListProps = {
   returnToMiniGame?:
 
     MiniGameId | null
+
+  onContentHeightChange?: (height: number) => void
+  onProjectOpenChange?: (open: boolean) => void
+  disableGridMotion?: boolean
 
 }
 
@@ -269,6 +278,9 @@ function List({
   onLaunchMiniGame,
 
   returnToMiniGame = null,
+  onContentHeightChange,
+  onProjectOpenChange,
+  disableGridMotion = false,
 
 }: ListProps) {
 
@@ -414,6 +426,9 @@ function List({
 
   // ========================================
 
+  // Synchronous guard: prevents overlapping keyboard/click transitions.
+  const transitionLockedRef = useRef(false)
+
   const timeoutRef =
 
     useRef<number | null>(
@@ -421,6 +436,14 @@ function List({
       null
 
     )
+
+  const directoryListRef = useRef<HTMLDivElement | null>(null)
+  const previewRef = useRef<HTMLDivElement | null>(null)
+  const directoryGridRef = useRef<HTMLDivElement | null>(null)
+  const naturalViewRef = useRef<HTMLDivElement | null>(null)
+  const footerRef = useRef<HTMLDivElement | null>(null)
+  const [separatorHeight, setSeparatorHeight] = useState(0)
+  const [listWidth, setListWidth] = useState(260)
 
   const frameRef =
 
@@ -571,6 +594,7 @@ function List({
         "visible"
 
       )
+      transitionLockedRef.current = false
 
     })
 
@@ -588,6 +612,8 @@ function List({
 
   ) {
 
+    if (transitionLockedRef.current) return
+
     if (
 
       index ===
@@ -600,6 +626,7 @@ function List({
 
     }
 
+    transitionLockedRef.current = true
     clearAnimationTimers()
 
     setSelectedIndex(
@@ -645,6 +672,7 @@ function List({
     project: ProjectId
 
   ) {
+    if (transitionLockedRef.current) return
 
     if (
 
@@ -658,6 +686,7 @@ function List({
 
     }
 
+    transitionLockedRef.current = true
     clearAnimationTimers()
 
     /*
@@ -725,6 +754,7 @@ function List({
               "visible"
 
             )
+              transitionLockedRef.current = false
 
           })
 
@@ -743,6 +773,7 @@ function List({
   // ========================================
 
   function closeProject() {
+    if (transitionLockedRef.current) return
 
     if (
 
@@ -758,6 +789,7 @@ function List({
 
     }
 
+    transitionLockedRef.current = true
     clearAnimationTimers()
 
     /*
@@ -821,6 +853,7 @@ function List({
               "visible"
 
             )
+              transitionLockedRef.current = false
 
           })
 
@@ -839,6 +872,7 @@ function List({
   // ========================================
 
   function openSelectedItem() {
+    if (transitionLockedRef.current) return
 
     if (!selectedItem) {
 
@@ -920,6 +954,7 @@ function List({
 
     }
 
+    transitionLockedRef.current = true
     clearAnimationTimers()
 
     setDirectoryPhase(
@@ -979,6 +1014,7 @@ function List({
                 "visible"
 
               )
+              transitionLockedRef.current = false
 
             }
 
@@ -999,6 +1035,7 @@ function List({
   // ========================================
 
   function goBack() {
+    if (transitionLockedRef.current) return
 
     if (
 
@@ -1012,6 +1049,7 @@ function List({
 
     }
 
+    transitionLockedRef.current = true
     clearAnimationTimers()
 
     setDirectoryPhase(
@@ -1127,6 +1165,7 @@ function List({
                 "visible"
 
               )
+              transitionLockedRef.current = false
 
             }
 
@@ -1151,6 +1190,7 @@ function List({
     index: number
 
   ) {
+    if (transitionLockedRef.current) return
 
     if (
 
@@ -1273,6 +1313,8 @@ function List({
       event: KeyboardEvent
 
     ) {
+
+      if (event.repeat && (event.key === "Enter" || event.key === "Escape")) return
 
       // ========================================
 
@@ -1452,9 +1494,105 @@ function List({
 
   useEffect(() => {
 
-    return clearAnimationTimers
+    return () => {
+      clearAnimationTimers()
+      transitionLockedRef.current = false
+    }
 
   }, [])
+
+  useEffect(() => {
+    onProjectOpenChange?.(activeProject !== null)
+  }, [activeProject, onProjectOpenChange])
+
+  // Measure intrinsic content only; exclude the footer auto margin, which
+  // represents animated spare space rather than natural content height.
+  useLayoutEffect(() => {
+    const view = naturalViewRef.current
+    const footer = footerRef.current
+    if (!view || !footer || !onContentHeightChange) return
+
+    const measure = () => {
+      const viewStyle = window.getComputedStyle(view)
+      const footerStyle = window.getComputedStyle(footer)
+      const margin = (value: string) => Number.parseFloat(value) || 0
+      // The grid stretches with the animated frame, so its rendered height
+      // cannot be used as the intrinsic target (that would create feedback).
+      const grid = directoryGridRef.current
+      const list = directoryListRef.current
+      const preview = previewRef.current
+      // Read content directly even on mount, before separatorHeight's layout
+      // update commits: Container locks the morph target in its layout effect.
+      const viewHeight = !activeProject && grid && list && preview
+        ? grid.offsetTop +
+          Math.max(list.offsetHeight, preview.offsetHeight) + SEPARATOR_PADDING
+        : (view.firstElementChild as HTMLElement | null)?.scrollHeight ?? view.scrollHeight
+      const height =
+        viewHeight +
+        margin(viewStyle.marginTop) + margin(viewStyle.marginBottom) +
+        footer.offsetHeight +
+        margin(footerStyle.marginBottom)
+      onContentHeightChange(Math.ceil(height))
+    }
+
+    const observer = new ResizeObserver(measure)
+    observer.observe(view)
+    observer.observe(footer)
+    measure()
+    return () => observer.disconnect()
+  }, [onContentHeightChange, activeProject, separatorHeight])
+
+  // Keep the grid's intrinsic minimum at the taller of the list and preview.
+  // Its actual height follows the outer animated frame via flex layout.
+  // The preview is replaced at the same point as the existing panel animation.
+  useLayoutEffect(() => {
+    if (activeProject) return
+
+    const list = directoryListRef.current
+    const preview = previewRef.current
+    if (!list || !preview) return
+
+    // Measure layout sizes, not scaled screen rectangles. The incoming app
+    // starts at scale(.985); feeding that scale back into CSS shrinks both
+    // the separator and the frame target until the entrance has finished.
+    const updateHeight = () => {
+      const height =
+        Math.max(
+          list.offsetHeight,
+          preview.offsetHeight
+        ) + SEPARATOR_PADDING * 2
+
+      setSeparatorHeight((previous) =>
+        Math.abs(previous - height) < 0.5 ? previous : height
+      )
+    }
+
+
+    updateHeight()
+
+    const observer = new ResizeObserver(updateHeight)
+    observer.observe(list)
+    observer.observe(preview)
+    return () => observer.disconnect()
+  }, [activeProject, displayedIndex, navigationStack])
+
+  // Measure the intrinsic width of the directory names. The list itself
+  // is max-content, so its measurement is independent of the grid column.
+  useLayoutEffect(() => {
+    if (activeProject) return
+    const list = directoryListRef.current
+    if (!list) return
+
+    const updateWidth = () => {
+      const width = list.offsetWidth + 10
+      setListWidth((previous) => Math.abs(previous - width) < 1 ? previous : width)
+    }
+
+    const observer = new ResizeObserver(updateWidth)
+    observer.observe(list)
+    updateWidth()
+    return () => observer.disconnect()
+  }, [activeProject, navigationStack])
 
   // ========================================
 
@@ -1743,23 +1881,20 @@ function List({
     return (
 
       <div
+  className={`
+    ${getDirectoryClassName()}
+    flex h-full min-h-0 flex-col
+  `}
+>
 
-        className={
-
-          getDirectoryClassName()
-
-        }
-
-      >
-
-        <div className="mb-5 md:mb-7">
+        <div className="mb-6 md:mb-8">
           <p
             className="
               mt-1
               font-comic
-              text-sm
-              text-white/60
-              md:text-base
+              text-base
+              text-white/85
+              md:text-lg
             "
           >
             Select a directory to continue.
@@ -1772,9 +1907,9 @@ function List({
 
         {/* ======================================== */}
 
-        <div className="mb-5 flex items-center gap-2 font-comic text-xs text-white/35 sm:text-sm">
+        <div className="mb-7 flex items-center gap-2 font-comic text-base text-white/75">
 
-          <span className="text-white/60">
+          <span className="text-white/80">
 
             $
 
@@ -1784,7 +1919,7 @@ function List({
 
             {currentDirectory
 
-              ? `cd ${directoryPath}`
+              ? `${directoryPath}`
 
               : "~"}
 
@@ -1805,22 +1940,25 @@ function List({
         {/* ======================================== */}
 
         <div
-
-          className="
-
-            grid
-
-            grid-cols-[210px_minmax(0,1fr)]
-
-            gap-7
-
-            max-[520px]:grid-cols-1
-
-            max-[520px]:gap-5
-
-          "
-
+          ref={directoryGridRef}
+className={`relative grid min-h-0 flex-1 content-start items-start grid-cols-[var(--list-width)_1px_minmax(0,1fr)] gap-x-7 overflow-visible ${disableGridMotion ? "" : "transition-[grid-template-columns] duration-[300ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"} max-[680px]:grid-cols-1 max-[680px]:gap-y-7`}
+          style={{
+            "--list-width": `${listWidth}px`,
+            minHeight: separatorHeight > 0
+              ? `${separatorHeight - SEPARATOR_PADDING}px`
+              : undefined,
+          } as CSSProperties}
         >
+          {/* Keep the separator at the intrinsic list/preview height rather than
+              stretching with the frame. This prevents overshoot on return. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-3 w-px bg-white/15 max-[680px]:hidden"
+            style={{
+              left: "calc(var(--list-width) + 1.75rem)",
+              height: separatorHeight > 0 ? `${separatorHeight}px` : undefined,
+            }}
+          />
 
           {/* ======================================== */}
 
@@ -1828,7 +1966,7 @@ function List({
 
           {/* ======================================== */}
 
-          <div className="min-w-0">
+          <div ref={directoryListRef} className="col-start-1 row-start-1 w-max min-w-0 max-[680px]:w-full">
 
             <nav className="flex flex-col items-start">
 
@@ -1850,7 +1988,7 @@ function List({
 
                     }
 
-                    className="w-full"
+                    className="w-max"
 
                   >
 
@@ -1929,87 +2067,6 @@ function List({
               )}
 
             </nav>
-
-            {/* ======================================== */}
-
-            {/* KEYBOARD LEGEND */}
-
-            {/* ======================================== */}
-
-            <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 font-comic text-[11px] text-white/35">
-
-              <div className="flex items-center gap-2">
-
-                <span className="border border-white/20 px-1.5 py-0.5 text-white/60">
-
-                  ↑
-
-                </span>
-
-                <span className="border border-white/20 px-1.5 py-0.5 text-white/60">
-
-                  ↓
-
-                </span>
-
-                <span>
-
-                  MOVE
-
-                </span>
-
-              </div>
-
-              <div className="flex items-center gap-2">
-
-                <span className="border border-white/20 px-2 py-0.5 text-white/60">
-
-                  ENTER
-
-                </span>
-
-                <span>
-
-                  {selectedItem &&
-
-                  isMiniGame(
-
-                    selectedItem.id
-
-                  )
-
-                    ? "RUN"
-
-                    : "OPEN"}
-
-                </span>
-
-              </div>
-
-              {navigationStack.length >
-
-                0 && (
-
-                <div className="flex items-center gap-2">
-
-                  <span className="border border-white/20 px-2 py-0.5 text-white/60">
-
-                    ESC
-
-                  </span>
-
-                  <span>
-
-                    BACK
-
-                  </span>
-
-                </div>
-
-              )}
-
-            </div>
-
           </div>
 
           {/* ======================================== */}
@@ -2018,55 +2075,21 @@ function List({
 
           {/* ======================================== */}
 
-          <div className="relative min-w-0 overflow-hidden">
-
-            {displayedItem && (
-
-              <div
-
-                key={`${directoryPath}-${displayedItem.id}`}
-
-                className={
-
-                  getPanelClassName()
-
-                }
-
-              >
-
-                <SectionPanel
-
-                  item={
-
-                    displayedItem
-
-                  }
-
-                  onLaunchMiniGame={
-
-                    onLaunchMiniGame
-
-                  }
-
-                />
-
-              </div>
-
-            )}
-
-          </div>
-
-        </div>
-
-        {/* ======================================== */}
-
-        {/* PATH */}
-
-        {/* ======================================== */}
-
-        <div className="mt-7 border-t border-dashed border-white/15 pt-3 font-comic text-[11px] text-white/25 sm:text-xs">
-
-          PATH: {directoryPath}
+<div className="col-start-3 row-start-1 relative min-w-0 max-[680px]:col-start-1 max-[680px]:row-start-2">
+  <div ref={previewRef}>
+    {displayedItem && (
+      <div
+        key={`${directoryPath}-${displayedItem.id}`}
+        className={getPanelClassName()}
+      >
+        <SectionPanel
+          item={displayedItem}
+          onLaunchMiniGame={onLaunchMiniGame}
+        />
+      </div>
+    )}
+  </div>
+</div>
 
         </div>
 
@@ -2083,33 +2106,24 @@ function List({
   // ========================================
 
   return (
-
-    <div className="w-full overflow-hidden">
-
-      <div
-
-        className={`
-
-          project-view
-
-          ${getProjectClassName()}
-
-        `}
-
-      >
-
-        {activeProject
-
-          ? renderActiveProject()
-
-          : renderDirectoryView()}
-
+    <div className="flex h-full min-h-0 w-full flex-col">
+      <div className="min-h-0 flex-1 overflow-hidden">
+        <div className={`project-view flex h-full min-h-0 flex-col ${getProjectClassName()}`}>
+          <div ref={naturalViewRef} className="flex h-full min-h-0 flex-col">
+            {activeProject ? renderActiveProject() : renderDirectoryView()}
+          </div>
+        </div>
       </div>
 
+      <div ref={footerRef} className="mt-auto shrink-0">
+        <KeyboardFooter
+          projectOpen={activeProject !== null}
+          canGoBack={navigationStack.length > 0}
+          actionLabel={selectedItem && isMiniGame(selectedItem.id) ? "Run" : "Open"}
+        />
+      </div>
     </div>
-
   )
-
 }
 
 export default List

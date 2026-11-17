@@ -5994,9 +5994,8 @@ function PipelineGame({
         // Keep the 900×500 game ratio, but also cap the game by
         // available viewport height. On a 1366×768 laptop this
         // shrinks the game enough to keep the surrounding UI visible;
-        // on 1080p displays it is still free to use the full width.
-        width:
-          "min(100%, calc((100dvh - 220px) * 1.8))",
+        // on larger screens the viewport height limits the board width.
+        width: `min(100%, calc(var(--game-board-max-height, 600px) * ${CANVAS_WIDTH} / ${CANVAS_HEIGHT}))`,
         aspectRatio:
           `${CANVAS_WIDTH} / ${CANVAS_HEIGHT}`,
       }}
